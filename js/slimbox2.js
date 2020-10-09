@@ -55,13 +55,13 @@
 		options = $.extend({
 			loop: false,				// Allows to navigate between first and last images
 			overlayOpacity: 0.8,			// 1 is opaque, 0 is completely transparent (change the color in the CSS file)
-			overlayFadeDuration: 400,		// Duration of the overlay fade-in and fade-out animations (in milliseconds)
-			resizeDuration: 400,			// Duration of each of the box resize animations (in milliseconds)
+			overlayFadeDuration: 150,		// Duration of the overlay fade-in and fade-out animations (in milliseconds)
+			resizeDuration: 60,			// Duration of each of the box resize animations (in milliseconds)
 			resizeEasing: "swing",			// "swing" is jQuery's default easing
-			initialWidth: 250,			// Initial width of the box (in pixels)
-			initialHeight: 250,			// Initial height of the box (in pixels)
-			imageFadeDuration: 400,			// Duration of the image fade-in animation (in milliseconds)
-			captionAnimationDuration: 400,		// Duration of the caption animation (in milliseconds)
+			initialWidth: 0,			// Initial width of the box (in pixels)
+			initialHeight: 0,			// Initial height of the box (in pixels)
+			imageFadeDuration: 150,			// Duration of the image fade-in animation (in milliseconds)
+			captionAnimationDuration: 150,		// Duration of the caption animation (in milliseconds)
 			counterText: "Image {x} of {y}",	// Translate or change as you wish, or set it to false to disable counter text for image groups
 			closeKeys: [27, 88, 67],		// Array of keycodes to close Slimbox, default: Esc (27), 'x' (88), 'c' (67)
 			previousKeys: [37, 80],			// Array of keycodes to navigate to the previous image, default: Left arrow (37), 'p' (80)
@@ -190,9 +190,22 @@
 
 	function animateBox() {
 		center.className = "";
-		$(image).css({backgroundImage: "url(" + activeURL + ")", visibility: "hidden", display: ""});
-		$(sizer).width(preload.width);
-		$([sizer, prevLink, nextLink]).height(preload.height);
+		// Increase the judgment of browser width, height and picture width and height
+		$(image).css({backgroundImage: "url(" + activeURL + ")", visibility: "hidden", display: "","background-size":"100%"});
+		var p_w = preload.width,p_h = preload.height,w_w = win.width(),w_h = win.height();
+		if (p_w >= w_w || p_h >= w_h){
+			if ( w_w >= w_h ){
+				$(sizer).width(w_h*0.9*p_w/p_h);
+				$([sizer, prevLink, nextLink]).height(w_h*0.9);
+			}else{
+				$(sizer).width(w_w*0.9);
+				$([sizer, prevLink, nextLink]).height(w_w*0.9*p_h/p_w);
+			}			
+		}else{
+			$(sizer).width(preload.width);
+			$([sizer, prevLink, nextLink]).height(preload.height);
+		}
+		//End
 
 		$(caption).html(images[activeImage][1] || "");
 		$(number).html((((images.length > 1) && options.counterText) || "").replace(/{x}/, activeImage + 1).replace(/{y}/, images.length));
@@ -241,3 +254,15 @@
 	}
 
 })(jQuery);
+// AUTOLOAD CODE BLOCK (MAY BE CHANGED OR REMOVED)
+if (!/android|iphone|ipod|series60|symbian|windows ce|blackberry/i.test(navigator.userAgent)) {
+	jQuery(function($) {
+		$("a[rel^='lightbox']").slimbox({/* Put custom options here */}, null, function(el) {
+			return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
+		});
+	});
+}
+//适用范围需自行调整
+jQuery(document).ready(function($){
+	$(".post-content a:has(img)").slimbox();
+});
