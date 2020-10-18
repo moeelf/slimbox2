@@ -55,13 +55,13 @@
 		options = $.extend({
 			loop: false,				// Allows to navigate between first and last images
 			overlayOpacity: 0.8,			// 1 is opaque, 0 is completely transparent (change the color in the CSS file)
-			overlayFadeDuration: 150,		// Duration of the overlay fade-in and fade-out animations (in milliseconds)
-			resizeDuration: 60,			// Duration of each of the box resize animations (in milliseconds)
+			overlayFadeDuration: 300,		// Duration of the overlay fade-in and fade-out animations (in milliseconds)
+			resizeDuration: 100,			// Duration of each of the box resize animations (in milliseconds)
 			resizeEasing: "swing",			// "swing" is jQuery's default easing
 			initialWidth: 0,			// Initial width of the box (in pixels)
 			initialHeight: 0,			// Initial height of the box (in pixels)
-			imageFadeDuration: 150,			// Duration of the image fade-in animation (in milliseconds)
-			captionAnimationDuration: 150,		// Duration of the caption animation (in milliseconds)
+			imageFadeDuration: 100,			// Duration of the image fade-in animation (in milliseconds)
+			captionAnimationDuration: 100,		// Duration of the caption animation (in milliseconds)
 			counterText: "Image {x} of {y}",	// Translate or change as you wish, or set it to false to disable counter text for image groups
 			closeKeys: [27, 88, 67],		// Array of keycodes to close Slimbox, default: Esc (27), 'x' (88), 'c' (67)
 			previousKeys: [37, 80],			// Array of keycodes to navigate to the previous image, default: Left arrow (37), 'p' (80)
@@ -191,7 +191,7 @@
 	function animateBox() {
 		center.className = "";
 		// Increase the judgment of browser width, height and picture width and height
-		$(image).css({backgroundImage: "url(" + activeURL + ")", visibility: "hidden", display: "","background-size":"100%"});
+		$(image).css({backgroundImage: "url(" + activeURL + ")", visibility: "hidden", display: "", opacity: "0", "background-size":"100%"});
 		var p_w = preload.width,p_h = preload.height,w_w = win.width(),w_h = win.height();
 		if (p_w >= w_w || p_h >= w_h){
 			if ( w_w >= w_h ){
@@ -224,7 +224,7 @@
 		}
 		$(center).queue(function() {
 			$(bottomContainer).css({width: centerWidth, top: top + centerHeight, marginLeft: -centerWidth/2, visibility: "hidden", display: ""});
-			$(image).css({display: "none", visibility: "", opacity: ""}).fadeIn(options.imageFadeDuration, animateCaption);
+			$(image).css({display: "", visibility: "", opacity: "1"}).fadeIn(options.imageFadeDuration, animateCaption);
 		});
 	}
 
